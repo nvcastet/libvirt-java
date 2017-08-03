@@ -16,6 +16,7 @@ import org.libvirt.jna.virDomainInterfaceStats;
 import org.libvirt.jna.virDomainJobInfo;
 import org.libvirt.jna.virDomainMemoryStats;
 import org.libvirt.jna.virSchedParameter;
+import org.libvirt.jna.virTypedParameter;
 import org.libvirt.jna.virVcpuInfo;
 import org.libvirt.event.RebootListener;
 import org.libvirt.event.LifecycleListener;
@@ -1352,6 +1353,21 @@ public class Domain {
      */
     public void setMemory(long memory) throws LibvirtException {
         processError(libvirt.virDomainSetMemory(VDP, new NativeLong(memory)));
+    }
+
+    /**
+     * Changes the scheduler parameters
+     *
+     * @param params
+     *            an array of perf field to be set
+     * @throws LibvirtException
+     */
+    public void SetPerfEvents(String[] params, int flags) throws LibvirtException {
+        virTypedParameter[] input = new virTypedParameter[params.length];
+        for (int x = 0; x < params.length; x++) {
+            input[x] = TypedParameter.toNative(params[x]);
+        }
+        processError(libvirt.virDomainSetPerfEvents(VDP, input, params.length, flags));
     }
 
     /**
