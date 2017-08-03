@@ -257,6 +257,23 @@ public class Domain {
     }
 
     /**
+     * Set domain metadata.
+     *
+     * @param xmlDesc
+     *            XML description of the metadata
+     * @param flags
+     *            the an OR'ed set of virDomainModificationImpact
+     * @param key
+     *            XML namespace key
+     * @param uri
+     *            XML namespace URI
+     * @throws LibvirtException
+     */
+    public void setMetadata(String xmlDesc, String key, String uri, int flags) throws LibvirtException {
+        processError(libvirt.virDomainSetMetadata(VDP, 2, xmlDesc, key, uri, flags));
+    }
+
+    /**
      * Creates a virtual device attachment to backend.
      *
      * @see <a
