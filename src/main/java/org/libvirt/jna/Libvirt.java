@@ -11,6 +11,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.PointerByReference;
 
 import java.util.Arrays;
 import java.util.List;
@@ -210,6 +211,7 @@ public interface Libvirt extends Library {
     int virConnectIsEncrypted(ConnectionPointer virConnectPtr) ;
     int virConnectIsSecure(ConnectionPointer virConnectPtr) ;
     CString virConnectFindStoragePoolSources(ConnectionPointer virConnectPtr, String type, String srcSpec, int flags);
+    int virConnectGetAllDomainStats(ConnectionPointer virConnectPtr, int stats, PointerByReference retStats, int flags);
     CString virConnectGetCapabilities(ConnectionPointer virConnectPtr);
     CString virConnectGetHostname(ConnectionPointer virConnectPtr);
     int virConnectGetLibVersion(ConnectionPointer virConnectPtr, LongByReference libVer);
@@ -347,6 +349,7 @@ public interface Libvirt extends Library {
     int virDomainSetSchedulerParameters(DomainPointer virDomainPtr, virSchedParameter[] params, int nparams);
     int virDomainSetVcpus(DomainPointer virDomainPtr, int nvcpus);
     int virDomainShutdown(DomainPointer virDomainPtr);
+    void virDomainStatsRecordListFree(Pointer ptr);
     int virDomainSuspend(DomainPointer virDomainPtr);
     int virDomainUpdateDeviceFlags(DomainPointer virDomainPtr, String xml, int flags);
     int virDomainUndefine(DomainPointer virDomainPtr);

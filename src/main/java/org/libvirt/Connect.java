@@ -32,6 +32,7 @@ import com.sun.jna.Memory;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.PointerByReference;
 
 /**
  * The Connect object represents a connection to a local or remote
@@ -967,6 +968,13 @@ public class Connect {
     public String findStoragePoolSources(String type, String srcSpecs, int flags) throws LibvirtException {
         CString returnValue = libvirt.virConnectFindStoragePoolSources(VCP, type, srcSpecs, flags);
         return processError(returnValue).toString();
+    }
+
+
+    public DomainStatsRecords getAllDomainStats(int stats, int flags) throws LibvirtException {
+        PointerByReference retStats = new PointerByReference();
+        int numRecords = processError(libvirt.virConnectGetAllDomainStats(VCP, stats, retStats, flags));
+        return new DomainStatsRecords(retStats.getValue(), numRecords, this);
     }
 
     /**

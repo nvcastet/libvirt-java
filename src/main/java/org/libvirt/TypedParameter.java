@@ -20,9 +20,27 @@ public abstract class TypedParameter {
         TypedParameter returnValue = null;
         if (vParam != null) {
             switch (vParam.type) {
-                case (6):
-                    returnValue = new TypedBooleanParameter(vParam.value.b);
-                    break;
+            case (1):
+                returnValue = new TypedIntParameter(vParam.value.i);
+                break;
+            case (2):
+                returnValue = new TypedUintParameter(vParam.value.i);
+                break;
+            case (3):
+                returnValue = new TypedLongParameter(vParam.value.l);
+                break;
+            case (4):
+                returnValue = new TypedUlongParameter(vParam.value.l);
+                break;
+            case (5):
+                returnValue = new TypedDoubleParameter(vParam.value.d);
+                break;
+            case (6):
+                returnValue = new TypedBooleanParameter(vParam.value.b);
+                break;
+            case (7):
+                returnValue = new TypedStringParameter(vParam.value.bptr);
+                break;
             }
             returnValue.field = Native.toString(vParam.field);
         }
@@ -35,11 +53,34 @@ public abstract class TypedParameter {
         returnValue.field = copyOf(param.field.getBytes(), Libvirt.VIR_DOMAIN_SCHED_FIELD_LENGTH);
         returnValue.type = param.getType();
         switch (param.getType()) {
-            case (6):
-                returnValue.value.b = (byte) (((TypedBooleanParameter) param).value ? 1 : 0);
-                returnValue.value.setType(byte.class);
-                break;
-
+        case (1):
+            returnValue.value.i = ((TypedIntParameter) param).value;
+            returnValue.value.setType(int.class);
+            break;
+        case (2):
+            returnValue.value.i = ((TypedUintParameter) param).value;
+            returnValue.value.setType(int.class);
+            break;
+        case (3):
+            returnValue.value.l = ((TypedLongParameter) param).value;
+            returnValue.value.setType(long.class);
+            break;
+        case (4):
+            returnValue.value.l = ((TypedUlongParameter) param).value;
+            returnValue.value.setType(long.class);
+            break;
+        case (5):
+            returnValue.value.d = ((TypedDoubleParameter) param).value;
+            returnValue.value.setType(double.class);
+            break;
+        case (6):
+            returnValue.value.b = (byte) (((TypedBooleanParameter) param).value ? 1 : 0);
+            returnValue.value.setType(byte.class);
+            break;
+        case (7):
+            returnValue.value.bptr = ((TypedStringParameter) param).value.getBytes();
+            returnValue.value.setType(byte[].class);
+            break;
         }
         return returnValue;
     }

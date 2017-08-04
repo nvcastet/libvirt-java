@@ -10,4 +10,5 @@ public class virTypedParameterValue extends Union {
     public long l; /* data for long long integer case */
     public double d; /* data for double case */
     public byte b; /* data for char case */
+    public byte[] bptr; /* data for char case */
 }
