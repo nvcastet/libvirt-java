@@ -1355,6 +1355,20 @@ public class Domain {
     }
 
     /**
+     * Change the target amount of physical memory allocated to
+     * this domain. This function may requires privileged access to the
+     * hypervisor.
+     *
+     * @param memory
+     *            in kilobytes
+     * @param flags Modification flags
+     * @throws LibvirtException
+     */
+    public void setMemory(long memory, int flags) throws LibvirtException {
+        processError(libvirt.virDomainSetMemoryFlags(VDP, new NativeLong(memory), flags));
+    }
+
+    /**
      * Changes the scheduler parameters
      *
      * @param params
@@ -1381,6 +1395,21 @@ public class Domain {
      */
     public void setVcpus(int nvcpus) throws LibvirtException {
         processError(libvirt.virDomainSetVcpus(VDP, nvcpus));
+    }
+
+    /**
+     * Dynamically changes the number of virtual CPUs used by this domain. Note
+     * that this call may fail if the underlying virtualization hypervisor does
+     * not support it or if growing the number is arbitrary limited. This
+     * function requires priviledged access to the hypervisor.
+     *
+     * @param nvcpus
+     *            the new number of virtual CPUs for this domain
+     * @param flags modification flags
+     * @throws LibvirtException
+     */
+    public void setVcpus(int nvcpus, int flags) throws LibvirtException {
+        processError(libvirt.virDomainSetVcpusFlags(VDP, nvcpus, flags));
     }
 
     /**
