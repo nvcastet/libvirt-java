@@ -1165,6 +1165,29 @@ public class Domain {
     }
 
     /**
+     * Dynamically changes the real CPUs which can be allocated to a virtual
+     * CPU. This function requires privileged access to the hypervisor.
+     *
+     * @param vcpu
+     *            virtual cpu number
+     * @param cpumap
+     *            bit map of real CPUs represented by the the lower 8 bits of
+     *            each int in the array. Each bit set to 1 means that
+     *            corresponding CPU is usable. Bytes are stored in little-endian
+     *            order: CPU0-7, 8-15... In each byte, lowest CPU number is
+     *            least significant bit.
+     * @param flags modification flags
+     * @throws LibvirtException
+     */
+    public void pinVcpu(int vcpu, int[] cpumap, int flags) throws LibvirtException {
+        byte[] packedMap = new byte[cpumap.length];
+        for (int x = 0; x < cpumap.length; x++) {
+            packedMap[x] = (byte) cpumap[x];
+        }
+        processError(libvirt.virDomainPinVcpuFlags(VDP, vcpu, packedMap, cpumap.length, flags));
+    }
+
+    /**
      * Reboot this domain, the domain object is still usable there after but the
      * domain OS is being stopped for a restart. Note that the guest OS may
      * ignore the request.
