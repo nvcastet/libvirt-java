@@ -11,6 +11,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.PointerByReference;
 
 import java.util.Arrays;
 import java.util.List;
@@ -218,6 +219,7 @@ public interface Libvirt extends Library {
     String virConnectGetType(ConnectionPointer virConnectPtr);
     CString virConnectGetURI(ConnectionPointer virConnectPtr);
     int virConnectGetVersion(ConnectionPointer virConnectPtr, LongByReference hvVer);
+    int virConnectListAllDomains(ConnectionPointer virConnectPtr, PointerByReference domainPtrs, int flags);
     int virConnectListDefinedDomains(ConnectionPointer virConnectPtr, CString[] name, int maxnames);
     int virConnectListDefinedNetworks(ConnectionPointer virConnectPtr, CString[] name, int maxnames);
     int virConnectListDefinedStoragePools(ConnectionPointer virConnectPtr, CString[] names, int maxnames);

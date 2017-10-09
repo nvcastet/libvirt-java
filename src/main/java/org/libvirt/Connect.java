@@ -31,7 +31,9 @@ import static org.libvirt.BitFlagsHelper.OR;
 import com.sun.jna.Memory;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
+import com.sun.jna.PointerType;
 import com.sun.jna.ptr.LongByReference;
+import com.sun.jna.ptr.PointerByReference;
 
 /**
  * The Connect object represents a connection to a local or remote
@@ -1186,6 +1188,34 @@ public class Connect {
      */
     public int isSecure() throws LibvirtException {
         return processError(libvirt.virConnectIsSecure(VCP));
+    }
+
+    /**
+     * List all domains
+     * @return all domains
+     * @throws LibvirtException
+     */
+    public Domain[] listAllDomains() throws LibvirtException {
+        return listAllDomains(0);
+    }
+
+    /**
+     * Filter List of domains
+     * @param flags filter flags
+     * @return filter list of domains
+     * @throws LibvirtException
+     */
+    public Domain[] listAllDomains(int flags) throws LibvirtException {
+        final PointerByReference doms = new PointerByReference();
+        final int n = processError(libvirt.virConnectListAllDomains(VCP, doms, flags));
+        Pointer[] nativeDoms = doms.getValue().getPointerArray(0, n);
+        final Domain[] result = new Domain[n];
+        for (int i=0; i < n; ++i) {
+            DomainPointer domPtr = new DomainPointer();
+            domPtr.setPointer(nativeDoms[i]);
+            result[i] = new Domain(this, domPtr);
+        }
+        return result;
     }
 
     /**
