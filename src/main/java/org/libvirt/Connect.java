@@ -29,6 +29,7 @@ import static org.libvirt.ErrorHandler.processErrorIfZero;
 import static org.libvirt.BitFlagsHelper.OR;
 
 import com.sun.jna.Memory;
+import com.sun.jna.Native;
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
 import com.sun.jna.PointerType;
@@ -1215,6 +1216,7 @@ public class Connect {
             domPtr.setPointer(nativeDoms[i]);
             result[i] = new Domain(this, domPtr);
         }
+        Native.free(Pointer.nativeValue(doms.getValue()));
         return result;
     }
 
